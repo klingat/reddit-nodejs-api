@@ -137,9 +137,14 @@ module.exports = function RedditAPI(conn) {
           users.id AS userId, 
           username, 
           users.createdAt AS userCreatedAt, 
-          users.updatedAt AS userUpdatedAt
+          users.updatedAt AS userUpdatedAt,
+          subreddits.name AS subName,
+          subreddits.description AS description,
+          subreddits.createdAt AS subCreatedAt,
+          subreddits.updatedAt AS subUpdatedAt
         FROM posts
           JOIN users ON users.id=posts.userId
+          JOIN subreddits ON subreddits.id=posts.subredditId 
         ORDER BY posts.createdAt DESC
         LIMIT ? OFFSET ?`, [limit, offset],
         function(err, results) {
@@ -162,6 +167,13 @@ module.exports = function RedditAPI(conn) {
                   username: res.username,
                   createdAt: res.userCreatedAt,
                   updatedAt: res.userCreatedAt
+                },
+                subreddit: {
+                  name: res.subName,
+                  description: res.description,
+                  createdAt: res.subCreatedAt,
+                  updatedAt: res.subUpdatedAt
+                  
                 }
               }
             })
