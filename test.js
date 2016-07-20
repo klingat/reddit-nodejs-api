@@ -56,11 +56,26 @@ var redditAPI = reddit(connection);
 //     }
 // )
 
-redditAPI.getAllSubreddits(function (err, res) {
-    if (err) {
-        console.log(err);
-    }
-    else {
-        console.log(JSON.stringify(res, null, 4));
-    }
-});
+// redditAPI.getAllSubreddits(function (err, res) {
+//     if (err) {
+//         console.log(err);
+//     }
+//     else {
+//         console.log(JSON.stringify(res, null, 4));
+//     }
+// });
+
+
+// redditAPI.createPost({
+//     title: 'Hello Montréal...',
+//     url: 'https://www.reddit.com/r/AskReddit/hellomontreal',
+//     userId: 3
+// }, 1, function(err, post) {
+//     if (err) {
+//         console.log(err);
+//     }
+//     else {
+//         console.log(JSON.stringify(post, null, 4));
+//     }
+// });
+  

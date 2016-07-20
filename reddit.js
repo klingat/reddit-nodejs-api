@@ -3,6 +3,7 @@ var HASH_ROUNDS = 10;
 
 module.exports = function RedditAPI(conn) {
   return {
+    
     createUser: function(user, callback) {
       
       // first we have to hash the password...
@@ -58,9 +59,11 @@ module.exports = function RedditAPI(conn) {
         }
       });
     },
-    createPost: function(post, callback) {
+    
+    createPost: function(post, subredditId, callback) {
       conn.query(
-        'INSERT INTO posts (userId, title, url, createdAt) VALUES (?, ?, ?, ?)', [post.userId, post.title, post.url, new Date()],
+        'INSERT INTO posts (userId, title, url, createdAt, subredditId) VALUES (?, ?, ?, ?, ?)', [post.userId, post.title, post.url, new Date(), subredditId],
+        
         function(err, result) {
           if (err) {
             callback(err);
@@ -71,7 +74,7 @@ module.exports = function RedditAPI(conn) {
             the post and send it to the caller!
             */
             conn.query(
-              'SELECT id,title,url,userId, createdAt, updatedAt FROM posts WHERE id = ?', [result.insertId],
+              'SELECT id,title,url,userId, createdAt, updatedAt, subredditId FROM posts WHERE id = ?', [result.insertId],
               function(err, result) {
                 if (err) {
                   callback(err);
@@ -211,7 +214,6 @@ module.exports = function RedditAPI(conn) {
         );
       },
       
-      
       getAllSubreddits: function(callback) {
       conn.query(`
         SELECT 
@@ -231,8 +233,6 @@ module.exports = function RedditAPI(conn) {
         }
       );
       }
-      
-      
   };
 };
 
