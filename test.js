@@ -23,14 +23,14 @@ var redditAPI = reddit(connection);
 //     }
 // })
 
-redditAPI.getAllPosts(function(err, result) {
-    if(err) {
-        console.log ("ERROR");
-    }
-    else {
-        console.log(JSON.stringify(result, null, 4));
-    }
-})
+// redditAPI.getAllPosts(function(err, result) {
+//     if(err) {
+//         console.log ("ERROR");
+//     }
+//     else {
+//         console.log(JSON.stringify(result, null, 4));
+//     }
+// })
 
 // redditAPI.getAllPostsForUser(10, function(err, result) {
 //     if(err) {
@@ -41,3 +41,26 @@ redditAPI.getAllPosts(function(err, result) {
 //     }
 // })
 
+// redditAPI.createSubreddit(
+//     {
+//         name: "Montreal",
+//         description: "Poutine is good."
+//     },
+//     function(err, sub) {
+//         if (err) {
+//             console.log(err);
+//         }
+//         else {
+//             console.log(JSON.stringify(sub, null, 4));
+//         }
+//     }
+// )
+
+redditAPI.getAllSubreddits(function (err, res) {
+    if (err) {
+        console.log(err);
+    }
+    else {
+        console.log(JSON.stringify(res, null, 4));
+    }
+});

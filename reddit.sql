@@ -25,8 +25,7 @@ CREATE TABLE `posts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ALTER TABLE posts ADD subredditId INT; 
-
--- ALTER TABLE posts add CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`subredditId`) REFERENCES `subreddits` (`id`) ON DELETE SET NULL;
+-- ALTER TABLE posts add FOREIGN KEY (`subredditId`) REFERENCES `subreddits` (`id`) ON DELETE SET NULL;
 
 
 CREATE TABLE `subreddits` (
@@ -38,6 +37,3 @@ CREATE TABLE `subreddits` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-ALTER TABLE posts ADD subredditId INT; 
-
-ALTER TABLE posts add CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`subredditId`) REFERENCES `subreddits` (`id`) ON DELETE SET NULL;
