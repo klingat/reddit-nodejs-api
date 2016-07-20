@@ -93,22 +93,96 @@ module.exports = function RedditAPI(conn) {
       }
       var limit = options.numPerPage || 25; // if options.numPerPage is "falsy" then use 25
       var offset = (options.page || 0) * limit;
-      
+
       conn.query(`
-        SELECT id, title, url, userId, createdAt, updatedAt
+        SELECT 
+          posts.id, 
+          title, 
+          url, 
+          userId AS postUserId, 
+          posts.createdAt AS postCreatedAt, 
+          posts.updatedAt AS postUpdatedAt, 
+          users.id AS userId, 
+          username, 
+          users.createdAt AS userCreatedAt, 
+          users.updatedAt AS userUpdatedAt
         FROM posts
-        ORDER BY createdAt DESC
-        LIMIT ? OFFSET ?`
-        , [limit, offset],
+          JOIN users ON users.id=posts.userId
+        ORDER BY posts.createdAt DESC
+        LIMIT ? OFFSET ?`, [limit, offset],
         function(err, results) {
           if (err) {
             callback(err);
           }
           else {
-            callback(null, results);
+            
+            // console.log(results)
+            var mappedResults = results.map(function(res) {
+              return {
+                id: res.id,
+                title: res.title,
+                url: res.url,
+                createdAt: res.postCreatedAt,
+                updatedAt: res.updatedAt,
+                userId: res.postUserId,
+                user: {
+                  id: res.userId,
+                  username: res.username,
+                  createdAt: res.userCreatedAt,
+                  updatedAt: res.userCreatedAt
+                }
+              }
+            })
+            callback(null, mappedResults);
           }
         }
       );
-    }
-  }
-}
+      },
+
+      getAllPostsForUser: function(userId, options, callback) {
+        if (!callback) {
+          callback = options;
+          options = {};
+        }
+        var limit = options.numPerPage || 25; // if options.numPerPage is "falsy" then use 25
+        var offset = (options.page || 0) * limit;
+
+        conn.query(`
+          SELECT title, users.username, userId, url 
+          FROM posts 
+          JOIN users
+          ON users.id=posts.userId 
+          WHERE userId=?
+          ORDER BY posts.createdAt 
+          LIMIT ? OFFSET ?`, [userId, limit, offset],
+          function(err, results) {
+            if (err) {
+              callback(err);
+            }
+            else {
+              callback(null, results);
+            }
+          }
+        );
+      },
+      
+      getSinglePost: function(postId, callback) {
+        conn.query(`
+          SELECT title, url, postId 
+          FROM posts 
+          WHERE id=?`, [postId],
+          function(err, results) {
+            if (err) {
+              callback(err);
+            }
+            else {
+              callback(null, results);
+            }
+          }
+        );
+      }
+      
+  };
+};
+
+
