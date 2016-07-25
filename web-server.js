@@ -83,13 +83,13 @@ app.get("/posts", function(req, res) {
         from posts 
         left join users on users.id=posts.userId 
         order by posts.createdAt 
-        limit 5`, function(err, posts){
-            if(err) {
-                console.log(err);
-            }
-            else {
-                function createLi(data){
-                    return `
+        limit 5`, function(err, posts) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            function createLi(data) {
+                return `
                     <li class="content-item">
                           <h2 class="content-item__title">
                             <a href="${data.url}">${data.title}</a>
@@ -97,27 +97,32 @@ app.get("/posts", function(req, res) {
                           <p>Created by ${data.username}</p>
                         </li>
                     `
-                }
-                res.send( //if you dont use join at the end it returns it with commas.
-                    `<div id="contents">
+            }
+            res.send( //if you dont use join at the end it returns it with commas.
+                `<div id="contents">
                       <h1>List of contents</h1>
                       <ul class="contents-list">
                         ${posts.map(function(item){return createLi(item)}).join("")}
                       </ul>
-                    </div>`
-                    
-                    
-                    
-                    
-                    
-                    );
-            }
-        });
-    
-    
-        
-     
-})
+                </div>`
+            );
+        }
+    });
+});
+
+app.get("/createContent", function(req, res) {
+    res.send(`
+        <form action="/createContent" method="POST">
+             <div>
+                <input type="text" name="url" placeholder="Enter a URL to content">
+             </div>
+             <div>
+                <input type="text" name="title" placeholder="Enter the title of your content">
+             </div>
+             <button type="submit">Create!</button>
+        </form>
+    `);
+});
 
 
 
