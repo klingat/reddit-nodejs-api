@@ -69,7 +69,3 @@ CREATE TABLE `votes` (
 );
 
 
-select if(     (count(if(vote=1, 1, null))  <  count(if(vote=-1, 1, null)))     ,     count(if(vote=1,1,null)),null) from votes;
-
-
-select if(count(if(vote=1, 1, null)) < count(if(vote=-1, 1, null)), (voteScore * count(if(vote=1, 1, null)) / count(if(vote=-1, 1, null)), voteScore * count(if(vote=-1, 1, null)) / count(if(vote=1, 1, null))

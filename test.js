@@ -231,12 +231,13 @@ var redditAPI = reddit(connection);
 //   connection.end(); 
 // })
 
-redditAPI.getAllPostsSorted("controversial", function(err, res) {
-    if (err) {
-        console.log(err);
-    }
-    else {
-        console.log(JSON.stringify(res, null, 4));
-    }
-    connection.end();
-})
+// redditAPI.getAllPostsSorted("controversial", function(err, res) {
+//     if (err) {
+//         console.log(err);
+//     }
+//     else {
+//         console.log(JSON.stringify(res, null, 4));
+//     }
+//     connection.end();
+// })
+
