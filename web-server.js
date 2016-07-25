@@ -1,15 +1,20 @@
 
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser')
+
+app.use(bodyParser.urlencoded({ extended: false }))
 
 var mysql = require('mysql');
-
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'klingat',
     password: '',
     database: 'reddit'
 });
+
+var reddit = require('./reddit');
+var redditAPI = reddit(connection);
 
 
 app.get('/', function (req, res) {
@@ -82,7 +87,7 @@ app.get("/posts", function(req, res) {
         users.username 
         from posts 
         left join users on users.id=posts.userId 
-        order by posts.createdAt 
+        order by posts.createdAt desc
         limit 5`, function(err, posts) {
         if (err) {
             console.log(err);
@@ -124,7 +129,41 @@ app.get("/createContent", function(req, res) {
     `);
 });
 
+app.post("/createContent", function(req, res){
+    redditAPI.createPost({
+    title: req.body.title,
+    url: req.body.url,
+    userId: 1
+    }, 1, function(err, post) {
+            if (err) {
+                res.send(err);
+            }
+            else {
+                res.redirect(`/posts/${post.id}`);
+            }
+            });
+})
 
+app.get("/posts/:ID", function(req, res) {
+    var id = req.params.ID;
+    connection.query(`select 
+        posts.title, 
+        posts.url, 
+        users.username 
+        from posts
+        left join users on users.id=posts.userId
+        where posts.id=${id}`, function(err, posts) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            res.send( //if you dont use join at the end it returns it with commas.
+                `<h1><a href="${posts[0].url}">${posts[0].title}</a></h1>
+                <p>By ${posts[0].username}</p>`
+            );
+        }
+    });
+});
 
 
 
