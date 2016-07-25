@@ -3,7 +3,7 @@
 CREATE TABLE `users` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(50) NOT NULL,
-  `password` VARCHAR(60) NOT NULL, -- why 60??? ask me :) 
+  `password` VARCHAR(60) NOT NULL,
   `createdAt` DATETIME NOT NULL,
   `updatedAt` DATETIME NOT NULL,
   PRIMARY KEY (`id`),
@@ -51,8 +51,8 @@ CREATE TABLE `comments` (
   KEY `userId` (`userId`),
   KEY `postId` (`postId`),
   FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL,
-  FOREIGN KEY (`postId`) REFERENCES `posts` (`id`) ON DELETE SET NULL
-  -- FOREIGN KEY (`parentId`) REFERNCES `comments` (`id`) ON DELETE SET NULL
+  FOREIGN KEY (`postId`) REFERENCES `posts` (`id`) ON DELETE SET NULL,
+  FOREIGN KEY (`parentId`) REFERENCES `comments` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 

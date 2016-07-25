@@ -14,6 +14,18 @@ var reddit = require('./reddit');
 var redditAPI = reddit(connection);
 
 
+// redditAPI.createUser({
+//   username: 'John_Smith',
+//   password: 'bamboo'
+// }, function(err, user) {
+//   if (err) {
+//     console.log(err);
+//   }
+//   else {
+//       console.log(JSON.stringify(user, null, 4))
+//   }
+// });
+
 // redditAPI.getSinglePost(1, function(err, result){
 //     if(err) {
 //         console.log(err);
@@ -66,18 +78,19 @@ var redditAPI = reddit(connection);
 // });
 
 
-// redditAPI.createPost({
-//     title: 'Hello Montréal...',
-//     url: 'https://www.reddit.com/r/AskReddit/hellomontreal',
-//     userId: 3
-// }, 1, function(err, post) {
-//     if (err) {
-//         console.log(err);
-//     }
-//     else {
-//         console.log(JSON.stringify(post, null, 4));
-//     }
-// });
+redditAPI.createPost({
+    title: 'WeWork Co-working Space',
+    url: 'https://www.reddit.com/r/Montreal/wework',
+    userId: 1
+}, 1, function(err, post) {
+    if (err) {
+        console.log(err);
+    }
+    else {
+        console.log(JSON.stringify(post, null, 4));
+    }
+    connection.end();
+});
 
 // redditAPI.createComment ({
 //     parentId: 4,
@@ -240,4 +253,5 @@ var redditAPI = reddit(connection);
 //     }
 //     connection.end();
 // })
+
 

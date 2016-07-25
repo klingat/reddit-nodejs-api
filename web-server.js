@@ -2,16 +2,26 @@
 var express = require('express');
 var app = express();
 
+var mysql = require('mysql');
+
+var connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'klingat',
+    password: '',
+    database: 'reddit'
+});
+
+
 app.get('/', function (req, res) {
   res.send('Hello, you fine person.');
 });
 
 
-// app.get('/hello', function(req, res) {
-//     console.log('I received a request!');
+app.get('/hello', function(req, res) {
+    console.log('I received a request!');
     
-//     res.send("<h1>Hello world!</h1>");
-// });
+    res.send("<h1>Hello world!</h1>");
+});
 
 app.get('/hello', function(req, res) {
     console.log(req.query);
@@ -25,7 +35,6 @@ app.get("/op/:operation", function(req, res) {
     
     if (req.params.operation === "add") {
         var add = Number(req.query.num1) + Number(req.query.num2);
-        // res.send(`${add}`);
         res.send({
             operator: req.params.operation,
             firstOperand: req.query.num1,
@@ -66,31 +75,50 @@ app.get("/op/:operation", function(req, res) {
     }
 });
 
-// app.get('/money/:account', function(request, response) {
+app.get("/posts", function(req, res) {
+    connection.query(`select 
+        posts.title, 
+        posts.url, 
+        users.username 
+        from posts 
+        left join users on users.id=posts.userId 
+        order by posts.createdAt 
+        limit 5`, function(err, posts){
+            if(err) {
+                console.log(err);
+            }
+            else {
+                function createLi(data){
+                    return `
+                    <li class="content-item">
+                          <h2 class="content-item__title">
+                            <a href="${data.url}">${data.title}</a>
+                          </h2>
+                          <p>Created by ${data.username}</p>
+                        </li>
+                    `
+                }
+                res.send( //if you dont use join at the end it returns it with commas.
+                    `<div id="contents">
+                      <h1>List of contents</h1>
+                      <ul class="contents-list">
+                        ${posts.map(function(item){return createLi(item)}).join("")}
+                      </ul>
+                    </div>`
+                    
+                    
+                    
+                    
+                    
+                    );
+            }
+        });
     
-//     var amount = request.query.amount;
     
-    
-//     if (!amount) {
-//         response.send('you have to tell me how much you want');
-//     }
-//     else if (request.query.amount <= balance) {
         
-//         balance = balance - request.query.amount;
-        
-//         response.send(
-//             `
-//             ok here you go! here are ${request.query.amount}
-//             remaining balance: ${balance};
-//             `
-//         );
-        
-//         console.log('dispensed ' + request.query.amount + '$ from ' + request.params.account + ' remaining: ' + balance);
-//     }
-//     else {
-//         response.send('i dont have enough');
-//     }
-// });
+     
+})
+
 
 
 
