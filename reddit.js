@@ -1,6 +1,13 @@
 var bcrypt = require('bcrypt');
 var HASH_ROUNDS = 10;
 
+var secureRandom = require('secure-random');
+
+function createSessionToken() {
+    return secureRandom.randomArray(100).map(code => code.toString(36)).join('');
+}
+
+
 module.exports = function RedditAPI(conn) {
   return {
 
@@ -149,7 +156,7 @@ module.exports = function RedditAPI(conn) {
     },
 
     getAllPosts: function(options, callback) {
-      
+
       // In case we are called without an options parameter, shift all the parameters manually
       if (!callback) {
         callback = options;
@@ -218,9 +225,9 @@ module.exports = function RedditAPI(conn) {
         }
       );
     },
-    
+
     getAllPostsSorted: function(sortingMethod, options, callback) {
-      
+
       // In case we are called without an options parameter, shift all the parameters manually
       if (!callback) {
         callback = options;
@@ -228,31 +235,31 @@ module.exports = function RedditAPI(conn) {
       }
       var limit = options.numPerPage || 25; // if options.numPerPage is "falsy" then use 25
       var offset = (options.page || 0) * limit;
-      
+
       // If no sorting method is chosen or not an option of sorting methods, this is default
       if (sortingMethod !== "newest" || sortingMethod !== "top" || sortingMethod !== "hot" || sortingMethod === null) {
         var choices = "postCreatedAt";
       }
-      
+
       // sorting method options
       if (sortingMethod === "newest") {
         var choices = "postCreatedAt";
       }
-      
+
       if (sortingMethod === "top") {
         var choices = "voteScore";
       }
-      
-      
-      if(sortingMethod === "hot") {
+
+
+      if (sortingMethod === "hot") {
         var choices = "sum(vote) / (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(postCreatedAt))";
       }
-      
-      if(sortingMethod === "controversial") {
+
+      if (sortingMethod === "controversial") {
         var choices = "if((count(if(vote=1, 1, null))>count(if(vote=-1, 1, null))),(sum(vote) * count(if(vote=1, 1, null))) / count(if(vote=-1, 1, null)), (sum(vote) * count(if(vote=-1, 1, null)) / count(if(vote=1, 1, null))))"
-     
+
       }
-      
+
       conn.query(`
         SELECT 
         
@@ -381,7 +388,7 @@ module.exports = function RedditAPI(conn) {
         }
       );
     },
-    
+
     getCommentsForPost: function(postId, callback) {
       conn.query(`
         SELECT
@@ -407,27 +414,70 @@ module.exports = function RedditAPI(conn) {
 
       )
     },
-    
-    createVoteOrUpdateVote: function (vote, callback) {
+
+    createVoteOrUpdateVote: function(vote, callback) {
       if (vote.vote === 1 || vote.vote === -1 || vote.vote === 0) {
         conn.query(
-        `INSERT INTO votes 
+          `INSERT INTO votes 
         (vote, userId, postId, createdAt) 
         VALUES (?, ?, ?, ?) 
-        ON DUPLICATE KEY UPDATE vote=?`, 
-        [vote.vote, vote.userId, vote.postId, new Date(), vote.vote], function(err, res){
-          if(err){
-            callback(err);
-          } else {
-            console.log("Your vote has been recorded.");
-            callback(null, res);
-          }
-        });
-      } else {
+        ON DUPLICATE KEY UPDATE vote=?`, [vote.vote, vote.userId, vote.postId, new Date(), vote.vote],
+          function(err, res) {
+            if (err) {
+              callback(err);
+            }
+            else {
+              console.log("Your vote has been recorded.");
+              callback(null, res);
+            }
+          });
+      }
+      else {
         callback('That is not a valid vote');
         return;
       }
+    },
+
+    checkLogin: function(username, password, callback) {
+      conn.query(`
+          SELECT * 
+          FROM users 
+          WHERE username=?`, [username],
+        function(err, results) {
+          if (err) {
+            callback(err);
+          }
+          else {
+            if (results.length > 0) {
+              var user = results[0];
+              var actualHashedPassword = results[0].password;
+              bcrypt.compare(password, actualHashedPassword, function(err, result) {
+                if (result === true) { // let's be extra safe here
+                  callback(null, user);
+                }
+                else {
+                  callback(new Error('username or password incorrect')); // in this case the password is wrong, but we reply with the same error
+                }
+              });
+            }
+            else {
+              callback("NO USER FOUND!");
+            }
+          }
+        }
+      );
+    },
+
+    createSession: function(userId, callback) {
+      var token = createSessionToken();
+      conn.query('INSERT INTO sessions SET userId = ?, token = ?', [userId, token], function(err, result) {
+        if (err) {
+          callback(err);
+        }
+        else {
+          callback(null, token); // this is the secret session token :)
+        }
+      });
     }
   };
 };
-

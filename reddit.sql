@@ -69,3 +69,9 @@ CREATE TABLE `votes` (
 );
 
 
+CREATE TABLE `sessions` (
+  `userId` INT,
+  `token` VARCHAR(10000)
+);
+
+

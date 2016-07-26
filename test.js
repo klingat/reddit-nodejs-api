@@ -78,19 +78,19 @@ var redditAPI = reddit(connection);
 // });
 
 
-redditAPI.createPost({
-    title: 'WeWork Co-working Space',
-    url: 'https://www.reddit.com/r/Montreal/wework',
-    userId: 1
-}, 1, function(err, post) {
-    if (err) {
-        console.log(err);
-    }
-    else {
-        console.log(JSON.stringify(post, null, 4));
-    }
-    connection.end();
-});
+// redditAPI.createPost({
+//     title: 'WeWork Co-working Space',
+//     url: 'https://www.reddit.com/r/Montreal/wework',
+//     userId: 1
+// }, 1, function(err, post) {
+//     if (err) {
+//         console.log(err);
+//     }
+//     else {
+//         console.log(JSON.stringify(post, null, 4));
+//     }
+//     connection.end();
+// });
 
 // redditAPI.createComment ({
 //     parentId: 4,
