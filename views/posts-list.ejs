@@ -71,6 +71,7 @@
           clear: both;
           padding-top: 160;
           padding-right: 40px;
+          padding-left: 0px;
         }
         
         p {
@@ -111,21 +112,42 @@
             color: grey;
         }
         
-        hr {
-          height: 10px;
-        	border: 0;
-	        box-shadow: 0 10px 10px -10px #47D1CC inset;
-        }
-        
         ul {
-              list-style-type: none;
+          list-style-type: none;
           }
           
         button {
-          font-size: 16px;
+          font-size: 20px;
           color: #f48695;
         }
+        
+        #voter {
+          float: left;
+          padding-right: 15px;
+          padding-top: 8;
+        }
           
+        #post {
+          float: left;
+    
+        }
+        #all {
+          clear: both;
+          width: 100%;
+          border-top: thin solid #47D1CC;
+        }
+        
+        #up {
+          color: #48c45f;
+        }
+        
+        #down {
+          color:#ef4747;
+        }
+        
+        p {
+          margin: 0;
+        }
       
     </style>
   </head>
@@ -170,29 +192,28 @@
     <ul>
       <% posts.forEach(function(post) { %>
       <li>
-        <h3><a href="<%= post.url %>"><%= post.title %></a></h3>
-
-        <p>Posted by: <span><%= post.user.username %></span></p>
-        <p>Date: <span><%= post.createdAt %></span></p>
-        <p>Votes: <span><%= post.voteScore ? post.voteScore : 0 %></span></p>
-      
-          <form action="/posts" method="post">
-              <input type="hidden" name="vote" value="1">
-              <input type="hidden" name="postId" value=<%= post.id %>>
-              <button type="submit">⬆</button>
-          </form>
-          
-          <form action="/posts" method="post">
-              <input type="hidden" name="vote" value="-1">
-              <input type="hidden" name="postId" value= <%= post.id %>>
-              <button type="submit">⬇</button>
-          </form>
-      
+        <div id="all">
+          <div id="voter">
+              <form action="/posts?sort=<%=sort%>" method="post">
+                  <input type="hidden" name="vote" value="1">
+                  <input type="hidden" name="postId" value=<%= post.id %>>
+                  <button id="up" type="submit">⬆</button>
+              </form>
+              <form action="/posts?sort=<%=sort%>" method="post">
+                  <input type="hidden" name="vote" value="-1">
+                  <input type="hidden" name="postId" value= <%= post.id %>>
+                  <button id="down" type="submit">⬇</button>
+              </form>
+          </div>
+        
+        <div id="post">
+            <h3><a href="<%= post.url %>"><%= post.title %></a></h3>
+            <p>Posted by: <span><%= post.user.username %></span></p>
+            <p>Date: <span><%= post.createdAt %></span></p>
+            <p>Votes: <span><%= post.voteScore ? post.voteScore : 0 %></span></p>
+        </div>
+        </div>
       </li>
-
-      
-      <hr>
-      
       <% }); %>
     </ul>
     </div>

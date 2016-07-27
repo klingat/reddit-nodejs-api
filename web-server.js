@@ -130,6 +130,7 @@ app.get('/', function(req, res) {
 // });
 
 app.get('/posts', function(request, response) {
+    
     var sort = null;
     if(request.query){
         sort = request.query.sort
@@ -144,8 +145,8 @@ app.get('/posts', function(request, response) {
             // response.send(
             //     posts.map(function(post) {return `<li>${post.title}</li>`; }).join('')
             // );
-            console.log("hey you")
-            response.render('posts-list', {posts: posts});
+            console.log(sort, "THE SORT")
+            response.render('posts-list', {posts: posts, sort: sort});
         }
     });
 });
@@ -295,6 +296,7 @@ app.post('/createPost', function(req, res) {
 });
 
 app.post("/posts", function(req, res) {
+    console.log(req.query, 'THE SORT');
     var vote = req.body;
     console.log(vote);
     if(!req.loggedInUser) {
@@ -307,7 +309,7 @@ app.post("/posts", function(req, res) {
                 console.log(err.stack);
             }
             else {
-                res.redirect("/posts")
+                res.redirect(`/posts?sort=${req.query.sort}`)
             }
         })
     }
