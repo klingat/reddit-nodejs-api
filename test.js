@@ -230,19 +230,19 @@ var redditAPI = reddit(connection);
 // })
 
 
-// redditAPI.createVoteOrUpdateVote ({
-//     vote: 1,
-//     userId: 9,
-//     postId:2
-// }, function(err, res) {
-//     if (err) {
-//         console.log(err);
-//     }
-//     else {
-//         console.log(res);
-//     }
-//   connection.end(); 
-// })
+redditAPI.createVoteOrUpdateVote ({
+    vote: 1,
+    userId: 11,
+    postId:4
+}, function(err, res) {
+    if (err) {
+        console.log(err);
+    }
+    else {
+        console.log(res);
+    }
+  connection.end(); 
+})
 
 // redditAPI.getAllPostsSorted("controversial", function(err, res) {
 //     if (err) {
@@ -253,5 +253,7 @@ var redditAPI = reddit(connection);
 //     }
 //     connection.end();
 // })
+
+
 
 

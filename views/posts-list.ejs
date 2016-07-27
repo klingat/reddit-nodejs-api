@@ -1,0 +1,200 @@
+<html>
+  <head>
+    <title>Homepage: <%= posts %></title>
+    <style>
+     body {
+        background: linear-gradient(180deg, #ddfffd, #ddfffd);
+        margin: 0;
+        }
+        
+     h1 {
+        color: #f48695;
+        font-family: "Avenir Next Condensed";
+        font-size: 50px;
+        text-shadow: 5px 3px 10px #FFFFFF;
+        text-align: center;
+        margin-top: 65px;
+        margin-bottom: 0px;
+        }
+        
+        img {
+            width: 65px;
+        }
+        
+        #container {
+          display: block;
+            width: 100%;
+            padding-top: 20px;
+            padding-bottom: 10px;
+            float: left;
+            clear: both;
+            /*background-color: #47D1CC;*/
+            background: linear-gradient(180deg, #47D1CC, #ddfffd);
+            position: fixed;
+        }
+        
+        #left {
+            float: left;
+            width: 80px;
+            padding-left: 20;
+        }
+        
+        #right {
+          margin-top: -70px;
+            float: left;
+            width: 200px;
+        }
+        
+        h3 {
+          color: #FFFFFF;
+            font-family: "Avenir Next Condensed";
+            font-size: 20px;
+            /*letter-spacing: 0px;*/
+            margin-top: 0px;
+            margin-bottom: 0;
+        }
+        
+        a {
+          color: #ffa172;
+        }
+        
+        a:hover {
+          color: #f48695;
+        }
+        
+        a:visited {
+          color: #ff5700;
+        }
+        
+        .posts {
+          display: block;
+          clear: both;
+          padding-top: 160;
+          padding-right: 40px;
+        }
+        
+        p {
+          color: grey;
+          font-family: "Avenir Next Condensed";
+          font-size: 16px;
+        }
+      
+        span {
+          color: #47D1CC;
+        }
+        
+        #menu {
+          float: left;
+          clear: both;
+          width: 200;
+          padding-left: 100;
+        }
+        .login{
+          float:left;
+          width: 55;
+        }
+        
+        .signup {
+          float:left;
+          width: 50;
+          padding-left: 10px;
+        }
+        
+        .post {
+          float:left;
+          padding-left: 24px;
+        }
+        
+        input { 
+            font-size: 16px; 
+            padding-bottom:10px;
+            color: grey;
+        }
+        
+        hr {
+          height: 10px;
+        	border: 0;
+	        box-shadow: 0 10px 10px -10px #47D1CC inset;
+        }
+        
+        ul {
+              list-style-type: none;
+          }
+          
+        button {
+          font-size: 16px;
+          color: #f48695;
+        }
+          
+      
+    </style>
+  </head>
+  <body>
+    
+    <div id="container">
+      <div id="left"><img src="https://freeiconshop.com/files/edd/reddit-flat.png" alt="reddit logo"></div>
+      <div id="right"><h1>Homepage</h1></div>
+      
+      <div id="menu">
+      <div class="login">
+        <form action="https://reddit-nodejs-api-workshop-klingat.c9users.io/login">
+          <input type="submit" value="LOGIN">
+        </form>
+      </div>
+      
+      <div class="signup">
+        <form action="https://reddit-nodejs-api-workshop-klingat.c9users.io/signup">
+          <input type="submit" value="SIGNUP">
+        </form>
+      </div>
+      
+      <div class="post">
+        <form action="https://reddit-nodejs-api-workshop-klingat.c9users.io/createPost">
+          <input type="submit" value="POST">
+        </form>
+      </div>
+      <div id="sorts">
+        <p>
+            Sort by: 
+            <a href="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts?sort=top">top</a>
+            <a href="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts?sort=hot">hot</a>
+            <a href="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts?sort=newest">new</a>
+            <a href="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts?sort=controversial">controversial</a>
+        </p>
+      </div>
+
+    </div>
+    </div>
+    
+    <div class="posts">
+    <ul>
+      <% posts.forEach(function(post) { %>
+      <li>
+        <h3><a href="<%= post.url %>"><%= post.title %></a></h3>
+
+        <p>Posted by: <span><%= post.user.username %></span></p>
+        <p>Date: <span><%= post.createdAt %></span></p>
+        <p>Votes: <span><%= post.voteScore ? post.voteScore : 0 %></span></p>
+      
+          <form action="/posts" method="post">
+              <input type="hidden" name="vote" value="1">
+              <input type="hidden" name="postId" value=<%= post.id %>>
+              <button type="submit">⬆</button>
+          </form>
+          
+          <form action="/posts" method="post">
+              <input type="hidden" name="vote" value="-1">
+              <input type="hidden" name="postId" value= <%= post.id %>>
+              <button type="submit">⬇</button>
+          </form>
+      
+      </li>
+
+      
+      <hr>
+      
+      <% }); %>
+    </ul>
+    </div>
+  </body>
+</html>

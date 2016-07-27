@@ -227,6 +227,7 @@ module.exports = function RedditAPI(conn) {
     },
 
     getAllPostsSorted: function(sortingMethod, options, callback) {
+      
 
       // In case we are called without an options parameter, shift all the parameters manually
       if (!callback) {
@@ -237,7 +238,7 @@ module.exports = function RedditAPI(conn) {
       var offset = (options.page || 0) * limit;
 
       // If no sorting method is chosen or not an option of sorting methods, this is default
-      if (sortingMethod !== "newest" || sortingMethod !== "top" || sortingMethod !== "hot" || sortingMethod === null) {
+      if (sortingMethod !== "newest" || sortingMethod !== "top" || sortingMethod !== "hot" || sortingMethod !== "controversial" ||sortingMethod === null) {
         var choices = "postCreatedAt";
       }
 
@@ -415,13 +416,15 @@ module.exports = function RedditAPI(conn) {
       )
     },
 
-    createVoteOrUpdateVote: function(vote, callback) {
+    createVoteOrUpdateVote: function(vote, user, callback) {
+      console.log(vote);
+      vote.vote = Number(vote.vote)
       if (vote.vote === 1 || vote.vote === -1 || vote.vote === 0) {
         conn.query(
           `INSERT INTO votes 
         (vote, userId, postId, createdAt) 
         VALUES (?, ?, ?, ?) 
-        ON DUPLICATE KEY UPDATE vote=?`, [vote.vote, vote.userId, vote.postId, new Date(), vote.vote],
+        ON DUPLICATE KEY UPDATE vote=?`, [vote.vote, user, vote.postId, new Date(), vote.vote],
           function(err, res) {
             if (err) {
               callback(err);
@@ -478,6 +481,23 @@ module.exports = function RedditAPI(conn) {
           callback(null, token); // this is the secret session token :)
         }
       });
-    }
-  };
+    },
+    
+    getUserFromSession: function(token, callback) {
+      conn.query(`
+          SELECT users.id, users.username 
+          FROM sessions 
+          join users on users.id = sessions.userId
+          WHERE token=?`, [token], 
+          function(err, results) {
+            if(err) {
+              callback(err);
+            }
+            else{
+              callback(null, results[0])
+            }
+          }
+    )}
+
+  }
 };
