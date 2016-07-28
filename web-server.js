@@ -25,9 +25,9 @@ var redditAPI = reddit(connection);
 
 
 
-app.get('/', function(req, res) {
-    res.send('Hello, you fine person.');
-});
+// app.get('/', function(req, res) {
+//     res.send('Hello, you fine person.');
+// });
 
 // app.get('/hello', function(req, res) {
 //     console.log('I received a request!');
@@ -133,19 +133,19 @@ app.get('/posts', function(request, response) {
     
     var sort = null;
     if(request.query){
-        sort = request.query.sort
+        sort = request.query.sort;
     }
+    
     redditAPI.getAllPostsSorted(sort, function(err, posts) {
         if (err) {
             response.status(500).send('try again later');
-            
             console.log(err.stack);
         }
         else {
             // response.send(
             //     posts.map(function(post) {return `<li>${post.title}</li>`; }).join('')
             // );
-            console.log(sort, "THE SORT")
+            // console.log(sort, "THE SORT")
             response.render('posts-list', {posts: posts, sort: sort});
         }
     });
@@ -181,26 +181,26 @@ app.get('/posts', function(request, response) {
 //     });
 // });
 
-app.get("/posts/:ID", function(req, res) {
-    var id = req.params.ID;
-    connection.query(`select 
-        posts.title, 
-        posts.url, 
-        users.username 
-        from posts
-        left join users on users.id=posts.userId
-        where posts.id=${id}`, function(err, posts) {
-        if (err) {
-            res.status(400).send("Try again later.");
-        }
-        else {
-            res.send( //if you dont use join at the end it returns it with commas.
-                `<h1><a href="${posts[0].url}">${posts[0].title}</a></h1>
-                <p>By ${posts[0].username}</p>`
-            );
-        }
-    });
-});
+// app.get("/posts/:ID", function(req, res) {
+//     var id = req.params.ID;
+//     connection.query(`select 
+//         posts.title, 
+//         posts.url, 
+//         users.username 
+//         from posts
+//         left join users on users.id=posts.userId
+//         where posts.id=${id}`, function(err, posts) {
+//         if (err) {
+//             res.status(400).send("Try again later.");
+//         }
+//         else {
+//             res.send( //if you dont use join at the end it returns it with commas.
+//                 `<h1><a href="${posts[0].url}">${posts[0].title}</a></h1>
+//                 <p>By ${posts[0].username}</p>`
+//             );
+//         }
+//     });
+// });
 
 app.get("/signup", function(req, res) {
     res.render("signup.ejs")
@@ -215,7 +215,7 @@ app.post("/signup", function(req, res) {
             res.status(400).send(err);
         }
         else {
-            res.redirect("/posts");
+            res.redirect("/login");
         }
     });
 });
@@ -296,7 +296,7 @@ app.post('/createPost', function(req, res) {
 });
 
 app.post("/posts", function(req, res) {
-    console.log(req.query, 'THE SORT');
+
     var vote = req.body;
     console.log(vote);
     if(!req.loggedInUser) {
@@ -314,6 +314,11 @@ app.post("/posts", function(req, res) {
         })
     }
 })
+
+app.post("/del", function(req, res) { 
+    res.cookie('SESSION', "", {expires: new Date()}); res.redirect('/posts'); 
+})
+
 
 
 
