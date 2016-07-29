@@ -9,6 +9,7 @@ app.use(bodyParser.urlencoded({
 })); //middleware
 
 app.use(cookieParser());
+app.use(checkLoginToken);
 
 app.set('view engine', 'ejs');
 
@@ -129,28 +130,6 @@ var redditAPI = reddit(connection);
 //     });
 // });
 
-app.get('/posts', function(request, response) {
-    
-    var sort = null;
-    if(request.query){
-        sort = request.query.sort;
-    }
-    
-    redditAPI.getAllPostsSorted(sort, function(err, posts) {
-        if (err) {
-            response.status(500).send('try again later');
-            console.log(err.stack);
-        }
-        else {
-            // response.send(
-            //     posts.map(function(post) {return `<li>${post.title}</li>`; }).join('')
-            // );
-            // console.log(sort, "THE SORT")
-            response.render('posts-list', {posts: posts, sort: sort});
-        }
-    });
-});
-
 // app.get("/createContent", function(req, res) {
 //     res.send(`
 //         <form action="/createContent" method="POST">
@@ -245,66 +224,94 @@ app.post("/login", function(req, res) {
 });
 
 function checkLoginToken(request, response, next) {
-  // check if there's a SESSION cookie...
-  if (request.cookies.SESSION) {
-    redditAPI.getUserFromSession(request.cookies.SESSION, function(err, user) {
-      // if we get back a user object, set it on the request. From now on, this request looks like it was made by this user as far as the rest of the code is concerned
-      
-     
-      if (user) {
-        request.loggedInUser = user;
 
-      }
-      next();
-    });
-  }
-  else {
-    // if no SESSION cookie, move forward
-    next();
-  }
+    // check if there's a SESSION cookie...
+    if (request.cookies.SESSION) {
+        redditAPI.getUserFromSession(request.cookies.SESSION, function(err, user) {
+            // if we get back a user object, set it on the request. From now on, this request looks like it was made by this user as far as the rest of the code is concerned
+
+
+            if (user) {
+                request.loggedInUser = user;
+
+            }
+            next();
+        });
+    }
+    else {
+        // if no SESSION cookie, move forward
+        next();
+    }
 }
-
-app.use(checkLoginToken);
 
 app.get("/createPost", function(req, res) {
     res.render("createPost.ejs")
 });
 
 app.post('/createPost', function(req, res) {
-  // before creating content, check if the user is logged in
-  if (!req.loggedInUser) {
-    // HTTP status code 401 means Unauthorized
-    res.status(401).send('You must be logged in to create content!');
-  }
-  else {
-    // here we have a logged in user, let's create the post with the user!
-    redditAPI.createPost({
-      title: req.body.title,
-      url: req.body.url,
-      userId: req.loggedInUser.id
-    }, 1, function(err, post) {
-      // do something with the post object or just response OK to the user :)
-      if (err) {
-            res.status(500).send("There was an error. Try again later.");
-            console.log(err.stack); //so that you can see the error in your terminal
+    // before creating content, check if the user is logged in
+    if (!req.loggedInUser) {
+        // HTTP status code 401 means Unauthorized
+        res.status(401).send('You must be logged in to create content!');
+    }
+    else {
+        // here we have a logged in user, let's create the post with the user!
+        redditAPI.createPost({
+            title: req.body.title,
+            url: req.body.url,
+            userId: req.loggedInUser.id
+        }, 1, function(err, post) {
+            // do something with the post object or just response OK to the user :)
+            if (err) {
+                res.status(500).send("There was an error. Try again later.");
+                console.log(err.stack); //so that you can see the error in your terminal
+            }
+            else {
+                res.redirect(`/posts`);
+            }
+        })
+    }
+});
+
+app.get('/posts', function(request, response) {
+
+    var sort = null;
+    if (request.query) {
+        sort = request.query.sort;
+    }
+
+    redditAPI.getAllPostsSorted(sort, function(err, posts) {
+        if (err) {
+            response.status(500).send('try again later');
+            console.log(err.stack);
         }
         else {
-            res.redirect(`/posts`);
+            // response.send(
+            //     posts.map(function(post) {return `<li>${post.title}</li>`; }).join('')
+            // );
+            // console.log(sort, "THE SORT")
+            connection.query(`select count(comment) as count from comments`, function(err, count) {
+                console.log(posts);
+                response.render('posts-list', {
+                    posts: posts,
+                    sort: sort,
+                    count: count[0].count
+                });
+            })
         }
-    })
-  }
+    });
 });
 
 app.post("/posts", function(req, res) {
 
     var vote = req.body;
     console.log(vote);
-    if(!req.loggedInUser) {
+    if (!req.loggedInUser) {
         res.status(401).send('You must be logged in to create content!');
     }
     else {
         redditAPI.createVoteOrUpdateVote(vote, req.loggedInUser.id, function(err, answer) {
-            if(err) {
+            if (err) {
                 res.status(500).send(err);
                 console.log(err.stack);
             }
@@ -315,11 +322,57 @@ app.post("/posts", function(req, res) {
     }
 })
 
-app.post("/del", function(req, res) { 
-    res.cookie('SESSION', "", {expires: new Date()}); res.redirect('/posts'); 
+app.post("/del", function(req, res) {
+    res.cookie('SESSION', "", {
+        expires: new Date()
+    });
+    res.redirect('/posts');
 })
 
+app.get("/comment", function(req, res) {
+    res.render("comment.ejs", {
+        postId: req.query.id
+    })
+})
 
+app.post("/comment", function(req, res) {
+    redditAPI.createComment({
+        parentId: null,
+        comment: req.body.comment,
+        userId: req.loggedInUser.id,
+        postId: req.body.postId
+    }, function(err, post) {
+        if (err) {
+            res.status(500).send('try again later');
+            console.log(err.stack);
+        }
+        else {
+            res.redirect("/posts")
+        }
+    });
+})
+
+app.get("/allcomments", function(req, res) {
+    var postId = req.query.id
+    console.log(postId)
+    redditAPI.getCommentsForPost(postId, function(err, result) {
+        if (err) {
+            res.status(500).send('try again later');
+        }
+        else {
+            if(!result[0]) {
+                res.render("no-comments.ejs")
+            }
+            else {
+                res.render("allcomments.ejs", {
+                comments: result,
+                title: result[0].title 
+            })
+            }
+            console.log(result);
+        }
+    });
+})
 
 
 

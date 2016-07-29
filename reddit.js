@@ -112,7 +112,10 @@ module.exports = function RedditAPI(conn) {
             the post and send it to the caller!
             */
             conn.query(
-              'SELECT id, parentId, comment, userId, postId, createdAt, updatedAt FROM comments WHERE id = ?', [result.insertId],
+              `SELECT 
+              id, parentId, comment, userId, postId, createdAt, updatedAt 
+              FROM comments
+              WHERE id = ?`, [result.insertId],
               function(err, result) {
                 if (err) {
                   callback(err);
@@ -393,15 +396,15 @@ module.exports = function RedditAPI(conn) {
     getCommentsForPost: function(postId, callback) {
       conn.query(`
         SELECT
-          c1.id as c1_id, c1.comment as c1_comment, c1.parentId as c1_parentId,
-          c2.id as c2_id, c2.comment as c2_comment, c2.parentId as c2_parentId,
-          c3.id as c3_id, c3.comment as c3_comment, c3.parentId as c3_parentId
-          
-        FROM comments AS c1
-        LEFT JOIN comments as c2 ON c2.parentId = c1.id
-        LEFT JOIN comments as c3 ON c3.parentId = c2.id
-        WHERE c1.postId=? and c1.parentId is NULL
-        ORDER BY c1.createdAt DESC`, [postId],
+        comment,
+        username,
+        comments.createdAt,
+        posts.title
+        FROM comments
+        LEFT JOIN users on users.id=comments.userId
+        LEFT JOIN posts on posts.id=comments.postId
+        WHERE postId=?
+        ORDER BY comments.createdAt DESC`, [postId],
 
         // callback function
         function(err, results) {

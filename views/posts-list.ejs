@@ -24,7 +24,7 @@
     #container {
       display: block;
         width: 100%;
-        height: 100px;
+        height: 120;
         padding-top: 20px;
         padding-bottom: 10px;
         float: left;
@@ -67,7 +67,7 @@
     .posts {
       display: block;
       clear: both;
-      padding-top: 160;
+      padding-top: 140;
       padding-right: 40px;
       padding-left: 0px;
     }
@@ -89,31 +89,16 @@
       padding-left: 100;
     }
     
-    .login{
+    .btn{
       float:left;
-      width: 55;
-    }
-
-    .signup {
-      float:left;
-      width: 50;
-      padding-left: 10px;
-    }
-    
-    .post {
-      float:left;
-      padding-left: 24px;
-    }
-    
-    .logout {
-      padding-left: 10px;
-      float: left;
+      width: 93;
     }
     
     input { 
         font-size: 16px; 
         padding-bottom:10px;
         color: grey;
+        width: 90;
     }
     
     ul {
@@ -133,7 +118,7 @@
       
     #post {
       float: left;
-
+      width: 40%;
     }
     
     #all {
@@ -156,7 +141,7 @@
     
     #sorts {
       float: left;
-      padding-left: 15px;
+      padding-left: 0;
     }
     
     button:hover {
@@ -165,6 +150,13 @@
       height: 32px;
       width: 34px;
     }
+
+    #comment {
+      padding-top: 70;
+      position: center;
+      margin: auto 0;
+    }
+    
   
       
     </style>
@@ -176,25 +168,25 @@
       <div id="right"><h1>Homepage</h1></div>
       
       <div id="menu">
-      <div class="login">
+      <div class="btn">
         <form action="https://reddit-nodejs-api-workshop-klingat.c9users.io/login">
           <input type="submit" value="LOGIN">
         </form>
       </div>
       
-      <div class="signup">
+      <div class="btn">
         <form action="https://reddit-nodejs-api-workshop-klingat.c9users.io/signup">
           <input type="submit" value="SIGNUP">
         </form>
       </div>
       
-      <div class="post">
+      <div class="btn">
         <form action="https://reddit-nodejs-api-workshop-klingat.c9users.io/createPost">
           <input type="submit" value="POST">
         </form>
       </div>
       
-      <div class="logout">
+      <div class="btn">
         <form action="/del" method="post">
           <input type="submit" value="LOGOUT">
         </form>
@@ -204,8 +196,11 @@
         <p>
             Sort by: 
             <a href="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts?sort=top">top</a>
+            &nbsp;
             <a href="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts?sort=hot">hot</a>
+            &nbsp;
             <a href="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts?sort=newest">new</a>
+            &nbsp;
             <a href="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts?sort=controversial">controversial</a>
         </p>
       </div>
@@ -236,9 +231,16 @@
             <p>Posted by: <span><%= post.user.username %></span></p>
             <p>Date: <span><%= post.createdAt %></span></p>
             <p>Votes: <span><%= post.voteScore ? post.voteScore : 0 %></span></p>
+            <p>
+              <a href="https://reddit-nodejs-api-workshop-klingat.c9users.io/comment?id=<%= post.id%>">Comment</a> 
+              &nbsp; 
+              &nbsp;
+              <a href="https://reddit-nodejs-api-workshop-klingat.c9users.io/allcomments?id=<%= post.id%>">View comments(<%= count%>)</a>
+            </p>
         </div>
         </div>
       </li>
+      
       <% }); %>
     </ul>
     </div>

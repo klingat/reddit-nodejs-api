@@ -1,0 +1,103 @@
+<html>
+    <head>
+        <style>
+        body {
+            background: linear-gradient(180deg, #FFCCD3, #47d1cc);
+        }
+        
+        form {
+            position: center;
+            padding: 10, 50, 10, 10;
+        }
+        
+        input { 
+            font-size: 16px; 
+            color: grey;
+        }
+        
+        button {
+            font-size: 20px;
+            color: #47D1CC;
+            font-family: "Avenir Next Condensed";
+            margin-top: 10;
+            margin-left: 25%;
+        }
+        
+        #button {
+            text-align: center;
+        }
+        
+        h1 {
+            color: #47D1CC;
+            font-family: "Avenir Next Condensed";
+            font-size: 50px;
+            text-shadow: 5px 3px 10px #FFFFFF;
+            text-align: center;
+            /*letter-spacing: 0px;*/
+            margin-top: 75px;
+            margin-bottom: 0;
+        }
+        
+        h3 {
+            color: #f48695;
+            font-family: "Qwigley";
+            text-align: center;
+            margin-top: 0px;
+            margin-bottom: 25px;
+            /*text-shadow: 1px 1px 1px black;*/
+            font-size: 35px;
+            letter-spacing: 3px;
+        }
+        
+        img {
+            width: 300;
+            border-radius: 10px;
+        }
+        
+        .container {
+            margin: 0 auto;
+            width: 630;
+        }
+        
+        .image {
+            float: left;
+            width: 300;
+        }
+        
+        .form {
+            float: right;
+            width: 300;
+            padding-top: 3;
+        }
+        
+        .homepage {
+            float: right;
+            padding-right: 15%;
+        }
+        </style>
+    </head>
+    <body>
+    <h1>Comment on (...)</h1>
+
+    <div class="container">
+        <div class="image"><img src="http://66.media.tumblr.com/5a9d0bbbe2ef23cc4ce77810a407fcdd/tumblr_mnh1flPnsB1s199fdo1_250.gif" alt="cat gif"></div>
+
+        <div class="form">
+            <form action="/comment" method="POST">
+                 <div>
+                       <TEXTAREA name="comment" rows="10" cols="40"></TEXTAREA>
+                       <input type="hidden" name="postId" value=<%=postId %>>
+                 </div>
+                 <button type="submit">Comment!😱</button>
+                 </div>
+            </form>
+            <div class="homepage">
+                    <form action="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts">
+                      <input type="submit" value="<< back to homepage">
+                    </form>
+          </div>
+        </div>
+        </div>
+    </div>
+    </body>
+</html>
