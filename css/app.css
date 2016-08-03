@@ -1,0 +1,123 @@
+body {
+  background-color: #ddfffd;
+  margin: 0 auto;
+  }
+  
+img {
+  height: 45px;
+}  
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: linear-gradient(180deg, #47d1cc, #ddfffd);
+  padding: 15px;
+}
+
+#menu {
+  display: flex;
+  flex-direction: row;
+  padding-left: 62px;
+  
+}
+
+#header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  color: #f48695;
+  font-family: "Avenir Next Condensed";
+  font-size: 50px;
+  text-shadow: 5px 3px 10px #FFFFFF;
+  margin:0;
+  }
+
+h3 {
+  color: #ffa172;
+  font-family: "Avenir Next Condensed";
+}  
+
+a {
+  color: #ffa172;
+  font-family: "Avenir Next Condensed";
+}
+
+a:hover {
+  color: #f48695;
+  font-family: "Avenir Next Condensed";
+}
+
+p {
+  color: grey;
+  font-family: "Avenir Next Condensed";
+  font-size: 16px;
+  margin: 0;
+}
+
+span {
+  color: #47D1CC;
+}
+
+input { 
+    font-size: 16px; 
+    color: grey;
+    width: 90;
+}
+
+ul {
+  list-style-type: none;
+  }
+  
+button {
+  font-size: 20px;
+  color: #f48695;
+}
+
+#voter {
+  display: flex;
+  flex-direction: column;
+  height: 85px;
+  justify-content: space-between;
+}
+  
+#up {
+  color: #73ba44;
+}
+
+#down {
+  color:#ef4747;
+}
+
+button:hover {
+  background-color: #47D1CC;
+  border: solid 1px #47D1CC;
+  height: 32px;
+  width: 34px;
+}
+
+#all {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: solid 1px #47d1cc;
+}
+
+footer {
+  color: #47d1cc;
+  text-align: center;
+  font-family: "Avenir Next Condensed";
+}
+
+#post {
+  margin-left: 15px;
+}
+
+#left {
+  padding-right: 12px;
+}
+

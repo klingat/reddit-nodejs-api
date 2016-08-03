@@ -1,94 +1,8 @@
-<html>
-    <head>
-        <style>
-        body {
-            background: linear-gradient(180deg, #FFCCD3, #47d1cc);
-        }
-        
-        form {
-            position: center;
-            padding: 10, 10, 10, 10;
-        }
-        
-        input { 
-            font-size: 16px; 
-            color: grey;
-        }
-        
-        button {
-            font-size: 20px;
-            color: #47D1CC;
-            font-family: "Avenir Next Condensed";
-        }
-        
-        #button {
-            text-align: center;
-            padding-top: 25px;
-        }
-        
-        h1 {
-            color: #47D1CC;
-            font-family: "Avenir Next Condensed";
-            font-size: 50px;
-            text-shadow: 5px 3px 10px #FFFFFF;
-            text-align: center;
-            /*letter-spacing: 0px;*/
-            margin-top: 75px;
-            margin-bottom: 0;
-        }
-        
-        h3 {
-            color: #f48695;
-            font-family: "Qwigley";
-            text-align: center;
-            margin-top: 0px;
-            margin-bottom: 25px;
-            /*text-shadow: 1px 1px 1px black;*/
-            font-size: 35px;
-            letter-spacing: 3px;
-        }
-        
-        #url {
-            padding-top: 2px;
-            text-align: center;
-            padding-bottom: 5px;
-        }
-        
-        #title {
-            text-align: center;
-        }
-        
-        img {
-            width: 300;
-            border-radius: 10px;
-        }
-        
-        .container {
-            margin: 0 auto;
-            width: 500;
-        }
-        
-        .image {
-            float: left;
-            width: 300;
-        }
-        
-        .form {
-            float: right;
-            width: 200;
-            padding-top: 10px;
-        }
-        
-        .homepage {
-            float: left;
-            padding-left: 25px;
-        }
-        </style>
-    </head>
-    <body>
+<% layout('layout-other') -%>
+
     <h1>Create a Post</h1>
 
-    <div class="container">
+        <div class="container">
         <div class="image"><img src="http://i.imgur.com/Gm5ZmDs.gif" alt="cat gif"></div>
 
         <div class="form">
@@ -103,13 +17,13 @@
                  <button type="submit">Create!😱</button>
                  </div>
             </form>
+            
             <div class="homepage">
-        <form action="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts">
-          <input type="submit" value="<< back to homepage">
-        </form>
-      </div>
+                <form action="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts">
+                    <input type="submit" value="<< back to homepage">
+                </form>
+            </div>
+      
+      
         </div>
         </div>
-    </div>
-    </body>
-</html>

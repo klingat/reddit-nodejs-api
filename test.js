@@ -35,14 +35,14 @@ var redditAPI = reddit(connection);
 //     }
 // })
 
-// redditAPI.getAllPosts(function(err, result) {
-//     if(err) {
-//         console.log ("ERROR");
-//     }
-//     else {
-//         console.log(JSON.stringify(result, null, 4));
-//     }
-// })
+redditAPI.getAllPosts(1, function(err, result) {
+    if(err) {
+        console.log ("ERROR");
+    }
+    else {
+        console.log(JSON.stringify(result, null, 4));
+    }
+})
 
 // redditAPI.getAllPostsForUser(10, function(err, result) {
 //     if(err) {

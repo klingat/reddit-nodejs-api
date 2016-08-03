@@ -1,114 +1,34 @@
-<html>
-    <head>
-        <style>
-        body {
-            background: linear-gradient(180deg, #FFCCD3, #47d1cc);
-        }
-        
-        form {
-            position: center;
-            padding: 10, 10, 10, 10;
-        }
-        
-        input { 
-            font-size: 16px; 
-            color:grey;
-        }
-        
-        button {
-            font-size: 20px;
-            color: #47D1CC;
-            font-family: "Avenir Next Condensed";
-        }
-        
-        #button {
-            text-align: center;
-            padding-top: 25px;
-        }
-        
-        h1 {
-            color: #47D1CC;
-            font-family: "Avenir Next Condensed";
-            font-size: 50px;
-            text-shadow: 5px 3px 10px #FFFFFF;
-            text-align: center;
-            /*letter-spacing: 0px;*/
-            margin-top: 75px;
-            margin-bottom: 0;
-        }
-        
-        h3 {
-            color: #f48695;
-            font-family: "Qwigley";
-            text-align: center;
-            margin-top: 0px;
-            margin-bottom: 25px;
-            /*text-shadow: 1px 1px 1px black;*/
-            font-size: 35px;
-            letter-spacing: 3px;
-        }
-        
-        #username {
-            text-align: center;
-            padding-bottom: 5px;
-        }
-        
-        #password {
-            text-align: center;
-        }
-        
-        img {
-            width: 150;
-        }
-        
-        .container {
-            margin: 0 auto;
-            width: 450;
-        }
-        
-        .image {
-            float: left;
-            width: 150;
-        }
-        
-        .form {
-            float: right;
-            width: 300px;
-        }
+<% layout('layout-other') -%>
 
-        .homepage{
-          padding-left: 75;
-        }
-        
-        </style>
-    </head>
-    <body>
     <h1>Welcome to Reddit Clone!</h1>
+    
     <h3>Create an account to start making your own posts!</h3>
+    
     <div class="container">
-        <div class="image"><img src="https://freeiconshop.com/files/edd/reddit-flat.png" alt="reddit logo"></div>
+        <div class="image"><img src="http://cdn.shopify.com/s/files/1/0185/5092/products/persons-0076.png?v=1369543921" alt="reddit logo"></div>
 
         <div class="form">
             <form action="/signup" method="POST">
-                 <div id="username">
+                
+                 <div class="url" id="username">
                     <input type="text" name="username" placeholder="Enter a username">
+                    <p class="username-error"></p>
                  </div>
-                 <div id="password">
+                 
+                 <div class="title" id="password">
                     <input type="password" name="password" placeholder="Enter a password">
+                    <p class="password-error"></p>
                  </div>
+                 
                  <div id="button">
-                 <button type="submit">Signup!😎</button>
+                     <button type="submit">Signup!😎</button>
                  </div>
             </form>
             <div class="homepage">
-        <form action="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts">
+                <form action="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts">
           <input type="submit" value="<< back to homepage">
         </form>
-      </div>
+            </div>
         </div>
-        
-    
-        
+
     </div>
-    </body>
-</html>

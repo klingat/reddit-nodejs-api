@@ -1,0 +1,102 @@
+html, body {
+    height: 100vh;
+}
+
+body {
+    background: linear-gradient(180deg, #FFCCD3, #47d1cc);
+        display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0;
+}
+
+footer {
+      color: #FFFFFF;
+      text-align: center;
+      font-family: "Avenir Next Condensed";
+      
+    }
+    
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+img {
+    height: 200px;
+    margin-right: 20px;
+    border-radius: 10px;
+}
+
+.homepage {
+    margin-top: 20px;
+    margin-left: 10px;
+}    
+
+
+input { 
+    font-size: 16px; 
+    color:grey;
+}
+
+button {
+    font-size: 20px;
+    color: #47D1CC;
+    font-family: "Avenir Next Condensed";
+}
+
+#button {
+    text-align: center;
+    padding-top: 25px;
+}
+
+h1 {
+    color: #47D1CC;
+    font-family: "Avenir Next Condensed";
+    font-size: 50px;
+    text-shadow: 5px 3px 10px #FFFFFF;
+    text-align: center;
+    letter-spacing: 0px;
+    margin-top: 75px;
+    margin-bottom: 0;
+}
+
+h3 {
+    color: #f48695;
+    font-family: "Qwigley";
+    text-align: center;
+    font-size: 35px;
+    letter-spacing: 3px;
+    margin: 0;
+    padding-bottom: 10px;
+}
+
+
+/*username*/
+.url {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 15px;
+    
+}
+
+/*password*/
+.title {
+    text-align: center;
+}
+
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+.username-error {
+    color: #dd4b39;
+}
+
+
+
+

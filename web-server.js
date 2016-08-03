@@ -11,6 +11,20 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(checkLoginToken);
 
+
+
+var engine = require('ejs-mate');
+
+// use ejs-locals for all ejs templates:
+app.engine('ejs', engine);
+
+
+// to link CSS files
+app.use(express.static(__dirname + '/css'));
+
+// app.use('/files', express.static(__dirname + 'public'));
+app.use(express.static(__dirname + '/scripts'));
+
 app.set('view engine', 'ejs');
 
 var mysql = require('mysql');
@@ -23,8 +37,6 @@ var connection = mysql.createConnection({
 
 var reddit = require('./reddit');
 var redditAPI = reddit(connection);
-
-
 
 // app.get('/', function(req, res) {
 //     res.send('Hello, you fine person.');
@@ -279,6 +291,8 @@ app.get('/posts', function(request, response) {
     if (request.query) {
         sort = request.query.sort;
     }
+    
+    // var options = request.query.page
 
     redditAPI.getAllPostsSorted(sort, function(err, posts) {
         if (err) {
@@ -290,14 +304,11 @@ app.get('/posts', function(request, response) {
             //     posts.map(function(post) {return `<li>${post.title}</li>`; }).join('')
             // );
             // console.log(sort, "THE SORT")
-            connection.query(`select count(comment) as count from comments`, function(err, count) {
-                console.log(posts);
                 response.render('posts-list', {
                     posts: posts,
                     sort: sort,
-                    count: count[0].count
+                    title: "Homepage"
                 });
-            })
         }
     });
 });
@@ -373,8 +384,6 @@ app.get("/allcomments", function(req, res) {
         }
     });
 })
-
-
 
 /* YOU DON'T HAVE TO CHANGE ANYTHING BELOW THIS LINE :) */
 

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="app.css"/>
+    <link rel="icon" 
+      type="image/png" 
+      href="http://cdn.shopify.com/s/files/1/0185/5092/products/persons-0076.png?v=1369543921">
+  </head>
+  
+  <body>
+    
+    <header>
+      
+      <nav>
+        
+        <div class="container">
+          
+            <div id="header">
+              
+                <div id="left"><img src="http://cdn.shopify.com/s/files/1/0185/5092/products/persons-0076.png?v=1369543921" alt="reddit logo"></div>
+                <div id="right"><h1><%= title %></h1></div>
+            
+            </div>
+            
+            <% if (title === "Homepage") { %>
+              <div id="menu">
+                <div class="btn">
+                  <form action="https://reddit-nodejs-api-workshop-klingat.c9users.io/login">
+                    <input type="submit" value="LOGIN">
+                  </form>
+                </div>
+                &nbsp;
+                <div class="btn">
+                  <form action="https://reddit-nodejs-api-workshop-klingat.c9users.io/signup">
+                    <input type="submit" value="SIGNUP">
+                  </form>
+                </div>
+                &nbsp;
+                <div class="btn">
+                  <form action="https://reddit-nodejs-api-workshop-klingat.c9users.io/createPost">
+                    <input type="submit" value="POST">
+                  </form>
+                </div>
+                &nbsp;
+                <div class="btn">
+                  <form action="/del" method="post">
+                    <input type="submit" value="LOGOUT">
+                  </form>
+                  
+              <!--    <div class="btn">-->
+              <!--  <form action="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts">-->
+              <!--        <input type="submit" value="<< back to homepage">-->
+              <!--  </form>-->
+              <!--</div>-->
+            </div>
+            
+            <div id="sorts">
+              <p>
+                  &nbsp;
+                  Sort by: 
+                  &nbsp; 
+                  <a href="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts?sort=top">top</a>
+                  &nbsp;
+                  <a href="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts?sort=hot">hot</a>
+                  &nbsp;
+                  <a href="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts?sort=newest">new</a>
+                  &nbsp;
+                  <a href="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts?sort=controversial">controversial</a>
+              </p>
+            </div>
+      
+            </div>
+              
+            <% } else { %>
+              <div id="menu">
+                <div class="homepage">
+                    <form action="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts">
+                      <input type="submit" value="<< back to homepage">
+                    </form>
+                </div>
+              </div>
+            <% } %>
+            
+        </div>
+          
+      </nav>
+      
+    </header>
+
+    <main>
+      
+      <%- body -%>
+      
+    </main>
+
+    <footer>&copy; 2016 Kash Money</footer>
+  </body>
+</html>

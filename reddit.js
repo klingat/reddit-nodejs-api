@@ -284,12 +284,15 @@ module.exports = function RedditAPI(conn) {
           subreddits.createdAt AS subCreatedAt,
           subreddits.updatedAt AS subUpdatedAt,
           
-          sum(vote) AS voteScore
+          sum(vote) AS voteScore,
+          
+          count(DISTINCT comments.id) as totalComments
           
         FROM posts
           LEFT JOIN users ON users.id=posts.userId
           LEFT JOIN subreddits ON subreddits.id=posts.subredditId
           LEFT JOIN votes ON votes.postId=posts.id
+          LEFT JOIN comments ON comments.postId=posts.id
         GROUP BY posts.id
         ORDER BY ${choices} DESC
         LIMIT ? OFFSET ?`, [limit, offset],
@@ -309,6 +312,7 @@ module.exports = function RedditAPI(conn) {
                 updatedAt: res.updatedAt,
                 userId: res.postUserId,
                 voteScore: res.voteScore,
+                totalComments: res.totalComments,
                 user: {
                   id: res.userId,
                   username: res.username,
