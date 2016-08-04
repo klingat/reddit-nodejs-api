@@ -3,6 +3,8 @@ var app = express();
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var secureRandom = require('secure-random');
+var cheerio = require('cheerio');
+var request = require("request");
 
 app.use(bodyParser.urlencoded({
     extended: false
@@ -427,6 +429,18 @@ app.get("/allcomments", function(req, res) {
             console.log(result);
         }
     });
+})
+
+app.post("/suggestTitle", function(req, res) {
+    console.log(req.body.url)
+    
+    request(req.body.url, function(err, result, body){
+        var html = body;
+        var $ = cheerio.load(html);
+        var title = $('title').text();
+        res.send(title);
+    })
+    
 })
 
 /* YOU DON'T HAVE TO CHANGE ANYTHING BELOW THIS LINE :) */

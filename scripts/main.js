@@ -70,17 +70,18 @@ $(document).ready(function() {
         $.post("/login", formData, function(res) {
             switch (res.msg) {
                 case 'ok':
-                    alert("Login successful! Redirecting to Homepage!")
+                    alert("😎😎😎Login successful! Redirecting to Homepage!")
                     window.location = '/posts';
                     break;
                 case "none":
-                    alert("Password incorrect or user doesn't exist, are you sure you signed up?")
+                    alert("😩😩😩Password incorrect or user doesn't exist, are you sure you signed up?")
             }
         })
 
     });
 
     $("#createPost").submit(function(event) {
+
         event.preventDefault();
         var $self = $(this);
         var formData = {};
@@ -107,17 +108,28 @@ $(document).ready(function() {
         $.post('/createPost', formData, function(res) {
             switch (res.msg) {
                 case 'no-login':
-                    alert('You must be logged in to create a post!')
-                    window.location= "/login"
+                    alert('😩😩😩You must be logged in to create a post!')
+                    window.location = "/login"
                     break;
                 case 'ok-create':
-                    alert("Post successfully created.")
+                    alert("😎😎😎Post successfully created.")
                     window.location = "/posts"
                     break;
             }
         })
+    });
+
+    $('#suggestButton').click(function(event) {
+        event.preventDefault();
+        var url = {};
+
+
+        $("#urlInput").serializeArray().forEach(function(inputField) {
+            url[inputField.name] = inputField.value;
+        })
+
+        $.post('/suggestTitle', url, function(res) {
+            $('#postTitle').val(res) //insert the response from back end into the postTitle input area.
+        })
     })
-
-
-
 })

@@ -99,6 +99,11 @@ h3 {
     margin: 0;
 }
 
+#homepage_createPost {
+    margin-top: 20px;
+    margin-left: 35px;
+}
 
-
-
+#postTitle, #urlInput {
+    width: 300px;
+}

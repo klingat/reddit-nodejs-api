@@ -8,19 +8,21 @@
         <div class="form">
             <form id="createPost" action="/createPost" method="POST">
                  <div class="url">
-                    <input type="text" name="url" placeholder="Enter URL to content">
+                    <input id='urlInput' type="text" name="url" placeholder="Enter URL to content">
                     <p class="username-error"></p>
                  </div>
                  <div class="title">
-                    <input type="text" name="title" placeholder="Enter title">
+                    <input id="postTitle" type="text" name="title" placeholder="Enter title">
                     <p class="password-error"></p>
                  </div>
                  <div id="button">
-                 <button type="submit">Create!😱</button>
+                     <button id='createButton' type="submit">Create!😱</button>
+                     <button id='suggestButton' type="submit">Suggest Title?😇</button>
                  </div>
             </form>
             
-            <div class="homepage">
+            
+            <div id="homepage_createPost">
                 <form action="https://reddit-nodejs-api-workshop-klingat.c9users.io/posts">
                     <input type="submit" value="<< back to homepage">
                 </form>
