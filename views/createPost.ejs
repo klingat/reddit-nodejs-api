@@ -6,12 +6,14 @@
         <div class="image"><img src="http://i.imgur.com/Gm5ZmDs.gif" alt="cat gif"></div>
 
         <div class="form">
-            <form action="/createPost" method="POST">
-                 <div id="url">
+            <form id="createPost" action="/createPost" method="POST">
+                 <div class="url">
                     <input type="text" name="url" placeholder="Enter URL to content">
+                    <p class="username-error"></p>
                  </div>
-                 <div id="title">
+                 <div class="title">
                     <input type="text" name="title" placeholder="Enter title">
+                    <p class="password-error"></p>
                  </div>
                  <div id="button">
                  <button type="submit">Create!😱</button>

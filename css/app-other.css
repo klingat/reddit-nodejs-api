@@ -93,8 +93,10 @@ h3 {
     align-content: center;
 }
 
-.username-error {
+.username-error, .password-error {
     color: #dd4b39;
+    font-family: "Avenir Next Condensed";
+    margin: 0;
 }
 
 

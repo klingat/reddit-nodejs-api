@@ -10,12 +10,14 @@
 
         <div id="right">
             <div class="form">
-                <form action="/login" method="POST">
-                     <div id="url">
+                <form id="logIn" action="/login" method="POST">
+                     <div class="url">
                         <input type="text" name="username" placeholder="Enter username">
+                        <p class="username-error"></p>
                      </div>
-                     <div id="title">
+                     <div class="title">
                         <input type="password" name="password" placeholder="Enter password">
+                        <p class="password-error"></p>
                      </div>
                      <div id="button">
                      <button type="submit">Login😏</button>

@@ -9,9 +9,8 @@ app.use(bodyParser.urlencoded({
 })); //middleware
 
 app.use(cookieParser());
+
 app.use(checkLoginToken);
-
-
 
 var engine = require('ejs-mate');
 
@@ -28,6 +27,7 @@ app.use(express.static(__dirname + '/scripts'));
 app.set('view engine', 'ejs');
 
 var mysql = require('mysql');
+
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'klingat',
@@ -36,6 +36,7 @@ var connection = mysql.createConnection({
 });
 
 var reddit = require('./reddit');
+
 var redditAPI = reddit(connection);
 
 // app.get('/', function(req, res) {
@@ -103,20 +104,20 @@ var redditAPI = reddit(connection);
 // });
 
 // app.get("/posts", function(req, res) {
-//     connection.query(`select 
-//         posts.title, 
-//         posts.url, 
-//         users.username 
-//         from posts 
-//         left join users on users.id=posts.userId 
-//         order by posts.createdAt desc
-//         limit 5`, function(err, posts) {
-//         if (err) {
-//             res.status(500).send("Try again later.😟");
+// connection.query(`select 
+//     posts.title, 
+//     posts.url, 
+//     users.username 
+//     from posts 
+//     left join users on users.id=posts.userId 
+//     order by posts.createdAt desc
+//     limit 5`, function(err, posts) {
+//     if (err) {
+//         res.status(500).send("Try again later.😟");
 
-//             console.log(err.stack);
-//         }
-//         else {
+//         console.log(err.stack);
+//     }
+//     else {
 //             function createLi(data) {
 //                 return `
 //                     <li class="content-item">
@@ -198,17 +199,44 @@ app.get("/signup", function(req, res) {
 });
 
 app.post("/signup", function(req, res) {
-    redditAPI.createUser({
-        username: req.body.username,
-        password: req.body.password
-    }, function(err, user) {
-        if (err) {
-            res.status(400).send(err);
-        }
-        else {
-            res.redirect("/login");
-        }
-    });
+
+    if (!req.body.username || !req.body.password) {
+        // res.send("missing username or password")
+        res.send({
+            msg: 'error-user'
+        });
+    }
+    else {
+        connection.query(`
+        select *
+        from users where username = ?`, [req.body.username], function(err, users) {
+            if (err) {
+                res.send(err);
+            }
+            else {
+                if (users.length > 0) {
+                    res.send({
+                        msg: 'taken'
+                    })
+                }
+                else {
+                    redditAPI.createUser({
+                        username: req.body.username,
+                        password: req.body.password
+                    }, function(err, user) {
+                        if (err) {
+                            res.status(400).send(err);
+                        }
+                        else {
+                            res.send({
+                                msg: 'ok-user'
+                            });
+                        }
+                    });
+                }
+            }
+        })
+    }
 });
 
 app.get("/login", function(req, res) {
@@ -216,9 +244,19 @@ app.get("/login", function(req, res) {
 });
 
 app.post("/login", function(req, res) {
-    redditAPI.checkLogin(req.body.username, req.body.password, function(err, outcome) {
+    if (!req.body.username || !req.body.password) {
+        // res.send("missing username or password")
+        res.send({
+            msg: 'error'
+        });
+    }
+    
+    else {
+        redditAPI.checkLogin(req.body.username, req.body.password, function(err, outcome) {
         if (err) {
-            res.status(401).send(err.message);
+            res.send({
+                msg: "none"
+            });
         }
         else {
             redditAPI.createSession(outcome.id, function(err, token) {
@@ -227,12 +265,14 @@ app.post("/login", function(req, res) {
                 }
                 else {
                     res.cookie('SESSION', token); // the secret token is now in the user's cookies!
-                    res.redirect('/posts');
-                    // res.send("hey")
+                    res.send({
+                        msg: "ok"
+                    });
                 }
             });
         }
     });
+    }
 });
 
 function checkLoginToken(request, response, next) {
@@ -264,7 +304,9 @@ app.post('/createPost', function(req, res) {
     // before creating content, check if the user is logged in
     if (!req.loggedInUser) {
         // HTTP status code 401 means Unauthorized
-        res.status(401).send('You must be logged in to create content!');
+        res.send({
+            msg: 'no-login'
+        })
     }
     else {
         // here we have a logged in user, let's create the post with the user!
@@ -279,9 +321,11 @@ app.post('/createPost', function(req, res) {
                 console.log(err.stack); //so that you can see the error in your terminal
             }
             else {
-                res.redirect(`/posts`);
+                res.send({
+                    msg: "ok-create"
+                })
             }
-        })
+        });
     }
 });
 
@@ -291,7 +335,7 @@ app.get('/posts', function(request, response) {
     if (request.query) {
         sort = request.query.sort;
     }
-    
+
     // var options = request.query.page
 
     redditAPI.getAllPostsSorted(sort, function(err, posts) {
@@ -304,11 +348,11 @@ app.get('/posts', function(request, response) {
             //     posts.map(function(post) {return `<li>${post.title}</li>`; }).join('')
             // );
             // console.log(sort, "THE SORT")
-                response.render('posts-list', {
-                    posts: posts,
-                    sort: sort,
-                    title: "Homepage"
-                });
+            response.render('posts-list', {
+                posts: posts,
+                sort: sort,
+                title: "Homepage"
+            });
         }
     });
 });
@@ -371,14 +415,14 @@ app.get("/allcomments", function(req, res) {
             res.status(500).send('try again later');
         }
         else {
-            if(!result[0]) {
+            if (!result[0]) {
                 res.render("no-comments.ejs")
             }
             else {
                 res.render("allcomments.ejs", {
-                comments: result,
-                title: result[0].title 
-            })
+                    comments: result,
+                    title: result[0].title
+                })
             }
             console.log(result);
         }
